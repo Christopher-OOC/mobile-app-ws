@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/mobile_users
+    username: chris
+    password: Chris@24
+  jpa:
+    hibernate:
+      ddl-auto: update
