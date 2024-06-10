@@ -1,13 +1,13 @@
 package com.appdeveloperblog.app.security;
 
 import java.io.IOException;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.security.core.userdetails.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,35 +29,31 @@ import lombok.extern.slf4j.Slf4j;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.SecretKey;
 
+@SuppressWarnings("deprecation")
 @Slf4j
-public class AnthenticationFilter extends UsernamePasswordAuthenticationFilter {
+@Component
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
-	@Autowired
-	private ObjectMapper objectMapper;
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-	public AnthenticationFilter(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
+	public AuthenticationFilter(AuthenticationManager authenticationManager) {
+		super(authenticationManager);
+
 	}
 	
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
 		
 		try {
-			UserLoginRequestModel creds = objectMapper.readValue(req.getInputStream(), UserLoginRequestModel.class);
+			UserLoginRequestModel creds = new ObjectMapper().readValue(req.getInputStream(), UserLoginRequestModel.class);
 			
 			log.info("USER: {}", creds);
 			
-			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
+			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
 		} 
 		catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {

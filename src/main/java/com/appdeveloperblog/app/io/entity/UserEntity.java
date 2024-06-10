@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name="users")
 public class UserEntity implements Serializable {
 
-	private static final long serialVersionUID = -5111707505377091226L;
+	private static final long serialVersionUID = 5111707505377091226L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
