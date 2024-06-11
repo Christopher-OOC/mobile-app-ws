@@ -15,44 +15,52 @@ import org.springframework.web.bind.annotation.RestController;
 import com.appdeveloperblog.app.service.UserService;
 import com.appdeveloperblog.app.shared.dto.UserDto;
 import com.appdeveloperblog.app.ui.model.request.UserDetailsRequestModel;
+import com.appdeveloperblog.app.ui.model.response.ErrorMessages;
 import com.appdeveloperblog.app.ui.model.response.UserRest;
+import com.appdeveloperblog.app.ws.exceptions.UserServiceException;
 
 @RestController
-@RequestMapping(value="/users", produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+@RequestMapping(value = "/users",
+				produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+		)
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping("/{id}")
 	public UserRest getUser(@PathVariable("id") String id) {
 		UserRest returnValue = new UserRest();
-		
+
 		UserDto userDto = userService.getUserByUserId(id);
-		
+
 		BeanUtils.copyProperties(userDto, returnValue);
-		
+
 		return returnValue;
 	}
-	
+
 	@PostMapping
-	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
 		
+		if (userDetails.getFirstName().isEmpty()) {
+			throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+		}
+
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
-		
+
 		UserDto createUser = userService.createUser(userDto);
 		BeanUtils.copyProperties(createUser, returnValue);
-		
+
 		return returnValue;
 	}
-	
+
 	@PutMapping
 	public String updateUser() {
 		return "Update user was called";
-	} 
-	
+	}
+
 	@DeleteMapping
 	public String deleteUser() {
 		return "Delete user was called";
