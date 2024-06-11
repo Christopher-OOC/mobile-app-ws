@@ -56,7 +56,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 			throw new RuntimeException(ex);
 		}
 	}
-
+	
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {

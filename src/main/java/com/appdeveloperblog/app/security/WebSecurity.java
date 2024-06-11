@@ -75,6 +75,8 @@ public class WebSecurity {
 					.usernameParameter("email")
 					.passwordParameter("password")
 					.permitAll()
+			).sessionManagement(session -> session
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			);
 		
 		AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(http));
@@ -84,10 +86,6 @@ public class WebSecurity {
 			
 		http.addFilter(authenticationFilter);
 		http.addFilter(authorizationFilter);
-		
-		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-			
-			
 			
 		return http.build();
 	}
