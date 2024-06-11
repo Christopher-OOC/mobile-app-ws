@@ -70,17 +70,14 @@ public class WebSecurity {
 			)
 			.csrf(csrf -> 
 					csrf.disable()
-			)
-			.formLogin(login -> login
-					.usernameParameter("email")
-					.passwordParameter("password")
-					.permitAll()
 			).sessionManagement(session -> session
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			);
 		
 		AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(http));
 		authenticationFilter.setFilterProcessesUrl("/users/login");
+		authenticationFilter.setUsernameParameter("email");
+		
 		
 		AuthorizationFilter authorizationFilter = new AuthorizationFilter(getAuthenticationManager(http));
 			

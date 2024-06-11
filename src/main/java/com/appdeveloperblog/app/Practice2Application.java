@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(value="com.appdeveloperblog.app.security")
 @ComponentScan(value="com.appdeveloperblog.app.ws.ui.controller")
+@ComponentScan(value="com.appdeveloperblog.app.ws.exceptions")
 @ComponentScan(value="com.appdeveloperblog.app.service.impl")
 @ComponentScan(value="com.appdeveloperblog.app.shared")
 @EntityScan(value="com.appdeveloperblog.app.io.entity")
