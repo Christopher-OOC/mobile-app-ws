@@ -6,3 +6,4 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+tokenSecret: "hgh6JUjhhY78HGTy5HGvhg7jkLUIBghff6gfjbGyfHUgfJdYtysh8gs97g89h"

@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -71,13 +72,22 @@ public class WebSecurity {
 					csrf.disable()
 			)
 			.formLogin(login -> login
-					.loginProcessingUrl("/login")
 					.usernameParameter("email")
 					.passwordParameter("password")
 					.permitAll()
 			);
+		
+		AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(http));
+		authenticationFilter.setFilterProcessesUrl("/users/login");
+		
+		AuthorizationFilter authorizationFilter = new AuthorizationFilter(getAuthenticationManager(http));
 			
-		http.addFilter(new AuthenticationFilter(getAuthenticationManager(http)));
+		http.addFilter(authenticationFilter);
+		http.addFilter(authorizationFilter);
+		
+		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+			
+			
 			
 		return http.build();
 	}

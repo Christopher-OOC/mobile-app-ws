@@ -14,6 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
+import com.appdeveloperblog.app.SpringApplicationContext;
+import com.appdeveloperblog.app.service.UserService;
+import com.appdeveloperblog.app.shared.dto.UserDto;
 import com.appdeveloperblog.app.ui.model.request.UserLoginRequestModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -57,7 +60,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		byte[] secretKeyBytes = Base64.getEncoder().encode(SecurityConstants.TOKEN_SECRET.getBytes());
+		byte[] secretKeyBytes = Base64.getEncoder().encode(SecurityConstants.getTokenSecret().getBytes());
 		SecretKey secretKey = new SecretKeySpec(secretKeyBytes, SignatureAlgorithm.HS512.getJcaName());
 		Instant now = Instant.now();
 		
@@ -66,8 +69,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 						.setSubject(username) 
 						.setExpiration(
 								Date.from(now.plusMillis(SecurityConstants.EXPIRATION_TIME)))
-						.setIssuedAt(Date.from(now)).signWith(secretKey, SignatureAlgorithm.HS512).compact();
+						.setIssuedAt(Date.from(now))
+						.signWith(secretKey, SignatureAlgorithm.HS512)
+						.compact();
+		
+		UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+		UserDto userDto = userService.getUser(username);
 	
 		response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+		response.addHeader("userId", userDto.getUserId());
 	}
 }

@@ -3,6 +3,7 @@ package com.appdeveloperblog.app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(value="com.appdeveloperblog.app.security")
@@ -18,4 +19,8 @@ public class Practice2Application {
 		SpringApplication.run(Practice2Application.class, args);
 	}
 	
+	@Bean
+	SpringApplicationContext springApplicationContext() {
+		return new SpringApplicationContext();
+	}
 }

@@ -2,6 +2,7 @@ package com.appdeveloperblog.app.service.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,4 +51,17 @@ public class UserServiceImpl  implements UserService {
 		return returnValue;
 	}
 
+	@Override
+	public UserDto getUser(String email) {
+		UserEntity userEntity = userRepository.findByEmail(email);
+		
+		if (userEntity == null) {
+			throw new UsernameNotFoundException("No user found with email: " + email);
+		}
+		
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		
+		return returnValue;
+	}
 }
