@@ -1,5 +1,7 @@
 package com.appdeveloperblog.app.ui.model.response;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +15,7 @@ public class UserRest {
 	private String lastName;
 
 	private String email;
+	
+	private List<AddressRest> addresses;
 
 }
