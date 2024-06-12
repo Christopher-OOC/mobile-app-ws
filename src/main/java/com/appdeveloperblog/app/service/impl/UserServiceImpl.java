@@ -3,6 +3,7 @@ package com.appdeveloperblog.app.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import com.appdeveloperblog.app.UserRepository;
 import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.service.UserService;
 import com.appdeveloperblog.app.shared.Utils;
+import com.appdeveloperblog.app.shared.dto.AddressDto;
 import com.appdeveloperblog.app.shared.dto.UserDto;
 import com.appdeveloperblog.app.ui.model.response.ErrorMessages;
 import com.appdeveloperblog.app.ws.exceptions.UserServiceException;
@@ -42,10 +44,17 @@ public class UserServiceImpl  implements UserService {
 		if (userRepository.findByEmail(user.getEmail()) != null) {
 			throw new RuntimeException("Record already exists");
 		}
+		
+		for (int i = 0; i < user.getAddresses().size(); i++) {
+			AddressDto address = user.getAddresses().get(i);
+			address.setUserDetails(user);
+			address.setAddressId(utils.generateAddressId(30));
+			user.getAddresses().set(i, address);
+		}
 
-		UserEntity userEntity = new UserEntity();
-		BeanUtils.copyProperties(user, userEntity);
-
+		ModelMapper modelMapper = new ModelMapper();
+		UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+		
 		String publicUserId = utils.generateUserId(30);
 
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -53,8 +62,8 @@ public class UserServiceImpl  implements UserService {
 
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 
-		UserDto returnValue = new UserDto();
-		BeanUtils.copyProperties(storedUserDetails, returnValue);
+		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
+		
 
 		return returnValue;
 	}

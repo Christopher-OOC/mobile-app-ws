@@ -1,6 +1,7 @@
 package com.appdeveloperblog.app.shared.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class UserDto implements Serializable  {
 	
 	private Boolean emailVerificationStatus = false;
 	
+	private List<AddressDto> addresses;
 	
 
 }
