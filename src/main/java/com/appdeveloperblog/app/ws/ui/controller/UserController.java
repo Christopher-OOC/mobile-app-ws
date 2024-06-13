@@ -32,8 +32,6 @@ import com.appdeveloperblog.app.ui.model.response.RequestOperationName;
 import com.appdeveloperblog.app.ui.model.response.RequestOperationStatus;
 import com.appdeveloperblog.app.ui.model.response.UserRest;
 
-import io.jsonwebtoken.lang.Arrays;
-
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
@@ -122,17 +120,20 @@ public class UserController {
 			java.lang.reflect.Type listType = new TypeToken<List<AddressRest>>() {
 			}.getType();
 			returnValue = new ModelMapper().map(addressesDto, listType);
-		
+
 			for (AddressRest addressRest : returnValue) {
-				Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddressById(id, addressRest.getAddressId())).withSelfRel();
+				Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+						.getUserAddressById(id, addressRest.getAddressId())).withSelfRel();
 				addressRest.add(selfLink);
 			}
-		
+
 		}
-		
-		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUser(id)).withRel("user");
-		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(id)).withSelfRel();
-		
+
+		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUser(id))
+				.withRel("user");
+		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(id))
+				.withSelfRel();
+
 		return CollectionModel.of(returnValue, selfLink, userLink);
 	}
 
@@ -144,13 +145,13 @@ public class UserController {
 		ModelMapper modelMapper = new ModelMapper();
 		AddressRest returnValue = modelMapper.map(addressDto, AddressRest.class);
 
-		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUser(userId)).withRel("user");
-		Link userAddressesLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(userId)).withRel("addresses");
-		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddressById(userId, addressId)).withSelfRel();
-
-//		returnValue.add(userLink);
-//		returnValue.add(userAddressesLink);
-//		returnValue.add(selfLink);
+		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUser(userId))
+				.withRel("user");
+		Link userAddressesLink = WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(userId)).withRel("addresses");
+		Link selfLink = WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddressById(userId, addressId))
+				.withSelfRel();
 
 		return EntityModel.of(returnValue, userLink, userAddressesLink, selfLink);
 	}

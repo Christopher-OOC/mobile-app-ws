@@ -63,15 +63,15 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 		
 		
 		Jwt<?, ?> jwt = jwtParser.parse(token);
-		Object subject = jwt.getPayload();
-		System.out.println(subject.toString());
+		Claims payLoad = (Claims)jwt.getPayload();
+		String subject = payLoad.getSubject();
+		System.out.println(subject);
 		
 		if (subject == null) {
 			return null;
 		}
 		
 		return new UsernamePasswordAuthenticationToken(subject, null, new ArrayList<>());
-		
 	}
 	
 

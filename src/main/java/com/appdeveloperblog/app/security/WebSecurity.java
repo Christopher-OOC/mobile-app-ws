@@ -39,7 +39,7 @@ public class WebSecurity {
 	}
 	
 	@Bean
-	UserDetailsService getUserDetailsService() {
+	protected UserDetailsService getUserDetailsService() {
 		return args -> {
 			UserEntity user = userRepository.findByEmail(args);
 			
@@ -47,14 +47,12 @@ public class WebSecurity {
 				throw new UsernameNotFoundException("No user found with email: " + args);
 			}
 			
-			log.info("User: {}", user);
-			
 			return new User(user.getEmail(), user.getEncryptedPassword(), Collections.emptyList());
 		};
 	}
 	
 	@Bean
-	AuthenticationManager getAuthenticationManager(HttpSecurity http) throws Exception {
+	protected AuthenticationManager getAuthenticationManager(HttpSecurity http) throws Exception {
 		AuthenticationManagerBuilder managerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 		
 		return managerBuilder.build();
