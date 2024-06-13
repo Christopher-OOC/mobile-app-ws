@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,6 +47,16 @@ public class UserEntity implements Serializable {
 	@Column(nullable=false)
 	private Boolean emailVerificationStatus = false;
 	
-	@OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<AddressEntity> addresses;
+
+	@Override
+	public String toString() {
+		return "UserEntity [id=" + id + ", userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", email=" + email + ", encryptedPassword=" + encryptedPassword + ", emailVerificationToken="
+				+ emailVerificationToken + ", emailVerificationStatus=" + emailVerificationStatus + ", addresses="
+				+ addresses + "]";
+	}
+	
+	
 }

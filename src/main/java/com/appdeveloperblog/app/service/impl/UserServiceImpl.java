@@ -149,10 +149,10 @@ public class UserServiceImpl  implements UserService {
 		Page<UserEntity> pageList = userRepository.findAll(pageable);
 		
 		List<UserEntity> users = pageList.getContent();
-		
+	
 		for (UserEntity userEntity : users) {
-			UserDto userDto = new UserDto();
-			BeanUtils.copyProperties(userEntity, userDto);
+			ModelMapper modelMapper = new ModelMapper();
+			UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 			returnValue.add(userDto);
 		}
 		

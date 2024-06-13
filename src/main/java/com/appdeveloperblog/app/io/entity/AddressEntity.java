@@ -2,8 +2,6 @@ package com.appdeveloperblog.app.io.entity;
 
 import java.io.Serializable;
 
-import com.appdeveloperblog.app.shared.dto.UserDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,4 +47,13 @@ public class AddressEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="users_id")
 	private UserEntity userDetails;
+
+	@Override
+	public String toString() {
+		return "AddressEntity [id=" + id + ", addressId=" + addressId + ", city=" + city + ", country=" + country
+				+ ", streetName=" + streetName + ", postalCode=" + postalCode + ", type=" + type + "]";
+	}
+	
+	
+	
 }
