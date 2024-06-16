@@ -57,16 +57,13 @@ public class UserController {
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
 
-//		UserDto userDto = new UserDto();
-//		BeanUtils.copyProperties(userDetails, userDto);
-
 		ModelMapper modelMapper = new ModelMapper();
 
 		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
 		UserDto createUser = userService.createUser(userDto);
-		// BeanUtils.copyProperties(createUser, returnValue);
 		returnValue = modelMapper.map(createUser, UserRest.class);
+		
 		return returnValue;
 	}
 
@@ -155,5 +152,23 @@ public class UserController {
 				.withSelfRel();
 
 		return EntityModel.of(returnValue, userLink, userAddressesLink, selfLink);
+	}
+	
+	@GetMapping("/email-verification")
+	public OperationStatusModel verifyEmailToken(@RequestParam("token") String token) {
+		
+		OperationStatusModel returnValue = new OperationStatusModel();
+		returnValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name()); 
+	
+		boolean isVerified = userService.verifyEmailToken(token);
+		
+		if (isVerified) {
+			returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		}
+		else {
+			returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+		}
+		
+		return returnValue;
 	}
 }

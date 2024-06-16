@@ -20,4 +20,7 @@ public interface UserService {
 	void deleteUser(String userId);
 
 	List<UserDto> getUsers(int page, int limit);
+
+	boolean verifyEmailToken(String token);
+
 }

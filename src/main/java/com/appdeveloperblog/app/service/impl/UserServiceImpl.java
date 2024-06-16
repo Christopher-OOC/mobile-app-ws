@@ -59,7 +59,9 @@ public class UserServiceImpl  implements UserService {
 
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		userEntity.setUserId(publicUserId);
-
+		userEntity.setEmailVerificationToken(Utils.generateEmailVerificationToken(publicUserId));
+		userEntity.setEmailVerificationStatus(false);
+		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 
 		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
@@ -154,6 +156,28 @@ public class UserServiceImpl  implements UserService {
 			ModelMapper modelMapper = new ModelMapper();
 			UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 			returnValue.add(userDto);
+		}
+		
+		return returnValue;
+	}
+
+	@Override
+	public boolean verifyEmailToken(String token) {
+		boolean returnValue = false;
+		
+		UserEntity userEntity = userRepository.findUserByEmailVerificationToken(token);
+		
+		if (userEntity != null) {
+			boolean hasTokenExpired = Utils.hasTokenExpired(token);
+			
+			if (!hasTokenExpired) {
+				userEntity.setEmailVerificationToken(null);
+				userEntity.setEmailVerificationStatus(true);
+				
+				userRepository.save(userEntity);
+				
+				returnValue = true;
+			}
 		}
 		
 		return returnValue;
