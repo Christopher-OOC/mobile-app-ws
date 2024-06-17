@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.appdeveloperblog.app.security.SecurityConstants;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -43,17 +44,26 @@ public class Utils {
 
 	public static boolean hasTokenExpired(String value) {
 		
-		SecretKey secretKey = new SecretKeySpec(
-				Base64.getEncoder().encode(SecurityConstants.getTokenSecret().getBytes()),
-				SignatureAlgorithm.HS512.getJcaName());
+		boolean returnValue = false;
 		
-		Claims claims = (Claims) Jwts.parser().setSigningKey(secretKey).build()
-				.parseClaimsJws(value).getPayload();
-
-		Date tokenExpirationDate = claims.getExpiration();
-		Date todayDate = new Date();
-
-		return tokenExpirationDate.before(todayDate);
+		try {
+			SecretKey secretKey = new SecretKeySpec(
+					Base64.getEncoder().encode(SecurityConstants.getTokenSecret().getBytes()),
+					SignatureAlgorithm.HS512.getJcaName());
+			
+			Claims claims = (Claims) Jwts.parser().setSigningKey(secretKey).build()
+					.parseClaimsJws(value).getPayload();
+	
+			Date tokenExpirationDate = claims.getExpiration();
+			Date todayDate = new Date();
+			
+			returnValue = tokenExpirationDate.before(todayDate);
+		}
+		catch (ExpiredJwtException ex) {
+			returnValue = true;
+		}
+		
+		return returnValue;
 	}
 
 	public static String generateEmailVerificationToken(String userId) {
