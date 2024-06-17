@@ -1,6 +1,7 @@
 package com.appdeveloperblog.app.shared.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -30,7 +31,7 @@ public class UserDto implements Serializable  {
 	
 	private Boolean emailVerificationStatus = false;
 	
-	private List<AddressDto> addresses;
+	private List<AddressDto> addresses = new ArrayList<>();
 	
 
 }
