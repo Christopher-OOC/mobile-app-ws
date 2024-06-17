@@ -1,5 +1,6 @@
 package com.appdeveloperblog.app.ui.model.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -16,6 +17,6 @@ public class UserRest {
 
 	private String email;
 	
-	private List<AddressRest> addresses;
+	private List<AddressRest> addresses = new ArrayList<>();
 
 }
