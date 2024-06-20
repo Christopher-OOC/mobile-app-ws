@@ -10,4 +10,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        format-sql: true
+      
+      
 tokenSecret: "hgh6JUjhhY78HGTy5HGvhg7jkLUIBghff6gfjbGyfHUgfJdYtysh8gs97g89h"
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBilder: TRACE
+              

@@ -1,12 +1,13 @@
 package com.appdeveloperblog.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -42,6 +43,7 @@ public class WebSecurity {
 	BCryptPasswordEncoder bcryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 
 	@Bean
 	protected UserDetailsService getUserDetailsService() {
