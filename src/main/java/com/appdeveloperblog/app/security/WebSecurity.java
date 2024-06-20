@@ -15,8 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.appdeveloperblog.app.UserRepository;
+import com.appdeveloperblog.app.SpringApplicationContext;
 import com.appdeveloperblog.app.io.entity.UserEntity;
+import com.appdeveloperblog.app.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.lang.Collections;
@@ -26,6 +27,11 @@ public class WebSecurity {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Bean
+	SpringApplicationContext getContext() {
+		return new SpringApplicationContext();
+	}
 
 	@Bean
 	ObjectMapper getObjectMapper() {
@@ -45,7 +51,7 @@ public class WebSecurity {
 			if (user == null) {
 				throw new UsernameNotFoundException("No user found with email: " + args);
 			}
-
+	
 			return new User(user.getEmail(), user.getEncryptedPassword(), user.getEmailVerificationStatus(), true, true,
 					true, Collections.emptyList());
 		};
@@ -70,6 +76,8 @@ public class WebSecurity {
 		AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(http));
 		authenticationFilter.setFilterProcessesUrl("/users/login");
 		authenticationFilter.setUsernameParameter("email");
+		authenticationFilter.setPasswordParameter("password");
+		
 
 		AuthorizationFilter authorizationFilter = new AuthorizationFilter(getAuthenticationManager(http));
 

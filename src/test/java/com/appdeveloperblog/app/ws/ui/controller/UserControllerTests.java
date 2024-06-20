@@ -1,6 +1,7 @@
 package com.appdeveloperblog.app.ws.ui.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 

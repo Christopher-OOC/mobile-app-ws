@@ -1,4 +1,4 @@
-package com.appdeveloperblog.app;
+package com.appdeveloperblog.app.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

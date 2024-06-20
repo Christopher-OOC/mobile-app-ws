@@ -1,6 +1,7 @@
 package com.appdeveloperblog.app.service.impl;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.appdeveloperblog.app.UserRepository;
+import com.appdeveloperblog.app.repository.UserRepository;
 import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.service.UserService;
 import com.appdeveloperblog.app.shared.Utils;
@@ -71,15 +72,15 @@ public class UserServiceImpl  implements UserService {
 	}
 
 	@Override
-	public UserDto getUser(String email) {
-		UserEntity userEntity = userRepository.findByEmail(email);
+	public UserDto getUser(String userId) {
+		UserEntity userEntity = userRepository.findByUserId(userId);
 		
 		if (userEntity == null) {
-			throw new UsernameNotFoundException("No user found with email: " + email);
+			throw new UsernameNotFoundException("No user found with ID: " + userId);
 		}
 		
-		UserDto returnValue = new UserDto();
-		BeanUtils.copyProperties(userEntity, returnValue);
+		ModelMapper modelMapper = new ModelMapper();
+		UserDto returnValue = modelMapper.map(userEntity, UserDto.class);
 		
 		return returnValue;
 	}
@@ -93,15 +94,15 @@ public class UserServiceImpl  implements UserService {
 
 	@Override
 	public UserDto getUserByUserId(String userId) {
-		UserDto returnValue = new UserDto();
 		
-		UserEntity userEntity = userRepository.findByUserId("No user with ID: " + userId);
+		UserEntity userEntity = userRepository.findByUserId(userId);
 		
 		if (userEntity == null) {
-			throw new UsernameNotFoundException("No user found with email: " + userId);
+			throw new UsernameNotFoundException("No user found with Id: " + userId);
 		}
 		
-		BeanUtils.copyProperties(userEntity, returnValue);
+		ModelMapper modelMapper = new ModelMapper();
+		UserDto returnValue = modelMapper.map(userEntity, UserDto.class);
 		
 		return returnValue;
 	}

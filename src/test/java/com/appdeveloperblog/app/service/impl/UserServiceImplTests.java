@@ -1,6 +1,7 @@
 package com.appdeveloperblog.app.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -21,9 +22,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.appdeveloperblog.app.UserRepository;
 import com.appdeveloperblog.app.io.entity.AddressEntity;
 import com.appdeveloperblog.app.io.entity.UserEntity;
+import com.appdeveloperblog.app.repository.UserRepository;
 import com.appdeveloperblog.app.shared.Utils;
 import com.appdeveloperblog.app.shared.dto.AddressDto;
 import com.appdeveloperblog.app.shared.dto.UserDto;

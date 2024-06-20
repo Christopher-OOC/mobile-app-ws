@@ -58,14 +58,14 @@ public class UserController {
 
 	@PostMapping
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
-		UserRest returnValue = new UserRest();
 
 		ModelMapper modelMapper = new ModelMapper();
 
 		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
 		UserDto createUser = userService.createUser(userDto);
-		returnValue = modelMapper.map(createUser, UserRest.class);
+		
+		UserRest returnValue = modelMapper.map(createUser, UserRest.class);
 		
 		return returnValue;
 	}

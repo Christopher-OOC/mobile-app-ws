@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(value="com.appdeveloperblog.app.ws.ui.controller")
 @ComponentScan(value="com.appdeveloperblog.app.ws.exceptions")
 @ComponentScan(value="com.appdeveloperblog.app.service.impl")
+@ComponentScan(value="com.appdeveloperblog.app.repository")
 @ComponentScan(value="com.appdeveloperblog.app.shared")
 @EntityScan(value="com.appdeveloperblog.app.io.entity")
 
@@ -18,10 +19,5 @@ public class Practice2Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Practice2Application.class, args);
-	}
-	
-	@Bean
-	SpringApplicationContext springApplicationContext() {
-		return new SpringApplicationContext();
 	}
 }

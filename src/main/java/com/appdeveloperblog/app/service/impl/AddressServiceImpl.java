@@ -7,10 +7,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.appdeveloperblog.app.AddressRepository;
-import com.appdeveloperblog.app.UserRepository;
 import com.appdeveloperblog.app.io.entity.AddressEntity;
 import com.appdeveloperblog.app.io.entity.UserEntity;
+import com.appdeveloperblog.app.repository.AddressRepository;
+import com.appdeveloperblog.app.repository.UserRepository;
 import com.appdeveloperblog.app.service.AddressService;
 import com.appdeveloperblog.app.shared.dto.AddressDto;
 

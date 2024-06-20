@@ -1,4 +1,4 @@
-package com.appdeveloperblog.app;
+package com.appdeveloperblog.app.repository;
 
 import java.util.List;
 
