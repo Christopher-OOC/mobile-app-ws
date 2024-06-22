@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.appdeveloperblog.app.repository.UserRepository;
 import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.service.UserService;
+import com.appdeveloperblog.app.shared.AmazonSES;
 import com.appdeveloperblog.app.shared.Utils;
 import com.appdeveloperblog.app.shared.dto.AddressDto;
 import com.appdeveloperblog.app.shared.dto.UserDto;
@@ -67,6 +68,7 @@ public class UserServiceImpl  implements UserService {
 
 		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 		
+		new AmazonSES().verifyEmail(returnValue);
 
 		return returnValue;
 	}
