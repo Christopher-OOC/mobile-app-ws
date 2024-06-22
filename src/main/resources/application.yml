@@ -8,14 +8,20 @@ spring:
     username: chris
     password: Chris@24
   jpa:
-    hibernate:
+    hibernate: 
       ddl-auto: update
     properties:
       hibernate:
         format-sql: true
-      
-      
 tokenSecret: "hgh6JUjhhY78HGTy5HGvhg7jkLUIBghff6gfjbGyfHUgfJdYtysh8gs97g89h"
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    url: api-docs.yaml
+    path: api-docs.html
+  api-docs:
+    version: OPENAPI_3_1
 
 logging:
   level:

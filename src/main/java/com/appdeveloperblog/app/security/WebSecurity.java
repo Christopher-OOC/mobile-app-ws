@@ -1,13 +1,11 @@
 package com.appdeveloperblog.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -28,7 +26,7 @@ public class WebSecurity {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Bean
 	SpringApplicationContext getContext() {
 		return new SpringApplicationContext();
@@ -43,7 +41,6 @@ public class WebSecurity {
 	BCryptPasswordEncoder bcryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
 
 	@Bean
 	protected UserDetailsService getUserDetailsService() {
@@ -53,7 +50,7 @@ public class WebSecurity {
 			if (user == null) {
 				throw new UsernameNotFoundException("No user found with email: " + args);
 			}
-	
+
 			return new User(user.getEmail(), user.getEncryptedPassword(), user.getEmailVerificationStatus(), true, true,
 					true, Collections.emptyList());
 		};
@@ -69,17 +66,17 @@ public class WebSecurity {
 	@Bean
 	protected SecurityFilterChain configureHttpSecurity(HttpSecurity http) throws Exception {
 
-		http.authorizeHttpRequests(request -> request
-				.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-				.requestMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
-				.anyRequest().authenticated()).csrf(csrf -> csrf.disable())
+		http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+				.permitAll().requestMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
+				.requestMatchers("/v3/api-docs*", "/configuration/**", "/swagger-ui/**", "/webjars/**").permitAll()
+				.anyRequest().authenticated())
+				.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		AuthenticationFilter authenticationFilter = new AuthenticationFilter(getAuthenticationManager(http));
 		authenticationFilter.setFilterProcessesUrl("/users/login");
 		authenticationFilter.setUsernameParameter("email");
 		authenticationFilter.setPasswordParameter("password");
-		
 
 		AuthorizationFilter authorizationFilter = new AuthorizationFilter(getAuthenticationManager(http));
 
