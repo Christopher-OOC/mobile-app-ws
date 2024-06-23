@@ -12,7 +12,7 @@ import com.appdeveloperblog.app.shared.dto.UserDto;
 
 public class AmazonSES {
 	
-	final String FROM = "olojedechristopher24@gmail.com";
+	final String FROM = "drealcrystal24@gmail.com";
 	
 	final String SUBJECT = "One last step to complete your registration with PhotoApp";
 	
