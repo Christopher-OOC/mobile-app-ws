@@ -26,6 +26,7 @@ import com.appdeveloperblog.app.service.AddressService;
 import com.appdeveloperblog.app.service.UserService;
 import com.appdeveloperblog.app.shared.dto.AddressDto;
 import com.appdeveloperblog.app.shared.dto.UserDto;
+import com.appdeveloperblog.app.ui.model.request.PasswordResetRequestModel;
 import com.appdeveloperblog.app.ui.model.request.UserDetailsRequestModel;
 import com.appdeveloperblog.app.ui.model.response.AddressRest;
 import com.appdeveloperblog.app.ui.model.response.OperationStatusModel;
@@ -174,4 +175,22 @@ public class UserController {
 		
 		return returnValue;
 	}
+	
+	@PostMapping("/password-reset-request")
+	public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+		
+		OperationStatusModel returnValue = new OperationStatusModel();
+		
+		boolean operationResult = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+		
+		returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+		returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+		
+		if (operationResult) {
+			returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		}
+		
+		return returnValue;
+	}
+	
 }

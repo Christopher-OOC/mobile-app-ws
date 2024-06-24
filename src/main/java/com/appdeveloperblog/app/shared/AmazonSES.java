@@ -16,10 +16,12 @@ public class AmazonSES {
 	
 	final String SUBJECT = "One last step to complete your registration with PhotoApp";
 	
+	final String PASSWORD_RESET_SUBJECT = "Password reset request";
+	
 	final String HTMLBODY = "<h1>Please verify your email address</h1>"
 			+ "<p>Thank you for registering with our mobile app. To complete registration process and be able to login"
 			+ " click on the following link: "
-			+ "<a href='http://localhost:8001/email-verification?token=$tokenValue': "
+			+ "<a href='http://localhost:8001/email-verification?token=$tokenValue'>"
 			+ "Final step to complete your registration" + "</a><br><br>"
 			+ "Thank you! And we are waiting for you inside!";
 	
@@ -30,6 +32,28 @@ public class AmazonSES {
 			http://localhost:8001/email-verification?token=$tokenValue
 			Thank you! And we  are waiting for you inside!
 			""";
+	
+	final String PASSWORD_RESET_HTMLBODY = """
+			<h1>A request to reset your password</h1>
+			<p>Hi, $firstName!</p> 
+			<p>Someone has requested to reset your password with our project. If it were not you, please ignore,
+			otherwise please click on the link below to set a new passoword: 
+			<a href='http://localhost:8001/verification-service/password-reset.html?token=$tokenValue'>
+			Click this link to Reset Password
+			</a><br><br>
+			Thank You!
+			""";
+	
+	final String PASSWORD_RESET_TextBODY = """
+			A request to reset your password
+			Hi, $firstName!
+			Someone has requested to reset your password with our project. If it were not you, please ignore,
+			otherwise please click on the link below to set a new passoword: 
+			http://localhost:8001/verification-service/password-reset.html?token=$tokenValue'
+			Click this link to Reset Password
+			Thank You!
+			""";
+	
 	
 	public void verifyEmail(UserDto userDto) {
 		
