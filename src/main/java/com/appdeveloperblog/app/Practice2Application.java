@@ -13,11 +13,12 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 @ComponentScan(value="com.appdeveloperblog.app.ws.exceptions")
 @ComponentScan(value="com.appdeveloperblog.app.service.impl")
 @ComponentScan(value="com.appdeveloperblog.app.repository")
+
 @ComponentScan(value="com.appdeveloperblog.app.shared")
+
 @EntityScan(value="com.appdeveloperblog.app.io.entity")
 
 @SpringBootApplication
-@OpenAPIDefinition
 public class Practice2Application {
 
 	public static void main(String[] args) {
