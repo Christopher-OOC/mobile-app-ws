@@ -1,17 +1,19 @@
 package com.appdeveloperblog.app.security;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
+import com.appdeveloperblog.app.io.entity.UserEntity;
+import com.appdeveloperblog.app.repository.UserRepository;
+
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -26,9 +28,12 @@ import javax.crypto.SecretKey;
 
 @Component
 public class AuthorizationFilter extends BasicAuthenticationFilter {
-
-	public AuthorizationFilter(AuthenticationManager authenticationManager) {
+	
+	private UserRepository userRepository;
+	
+	public AuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
 		super(authenticationManager);
+		this.userRepository = userRepository;
 	}
 
 	@Override
@@ -64,14 +69,19 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 		
 		Jwt<?, ?> jwt = jwtParser.parse(token);
 		Claims payLoad = (Claims)jwt.getPayload();
-		String subject = payLoad.getSubject();
-		System.out.println(subject);
+		String email = payLoad.getSubject();
+		System.out.println(email);
 		
-		if (subject == null) {
-			return null;
+		if (email != null) {
+			
+			UserEntity userEntity = userRepository.findByEmail(email);
+			UserPrincipal userPrincipal = new UserPrincipal(userEntity);
+			
+			return new UsernamePasswordAuthenticationToken(email, null, userPrincipal.getAuthorities());
 		}
 		
-		return new UsernamePasswordAuthenticationToken(subject, null, new ArrayList<>());
+		
+		return null;
 	}
 	
 

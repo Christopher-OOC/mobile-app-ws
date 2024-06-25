@@ -1,6 +1,7 @@
 package com.appdeveloperblog.app.io.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -10,6 +11,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -49,6 +53,11 @@ public class UserEntity implements Serializable {
 	
 	@OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<AddressEntity> addresses;
+	
+	@ManyToMany(cascade=CascadeType.PERSIST, fetch=FetchType.EAGER)
+	@JoinTable(name="users_roles", joinColumns=@JoinColumn(name="users_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="roles_id", referencedColumnName="id"))
+	private Collection<RoleEntity> roles;
 
 	@Override
 	public String toString() {

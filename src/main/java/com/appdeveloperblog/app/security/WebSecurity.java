@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,9 +19,8 @@ import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.jsonwebtoken.lang.Collections;
-
 @Configuration
+@EnableMethodSecurity
 public class WebSecurity {
 
 	@Autowired
@@ -45,14 +44,13 @@ public class WebSecurity {
 	@Bean
 	protected UserDetailsService getUserDetailsService() {
 		return args -> {
-			UserEntity user = userRepository.findByEmail(args);
+			UserEntity userEntity = userRepository.findByEmail(args);
 
-			if (user == null) {
+			if (userEntity == null) {
 				throw new UsernameNotFoundException("No user found with email: " + args);
 			}
 
-			return new User(user.getEmail(), user.getEncryptedPassword(), user.getEmailVerificationStatus(), true, true,
-					true, Collections.emptyList());
+			return new UserPrincipal(userEntity);
 		};
 	}
 
@@ -69,6 +67,7 @@ public class WebSecurity {
 		http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
 				.permitAll().requestMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
 				.requestMatchers(HttpMethod.GET, SecurityConstants.PASSWORD_RESET_REQUEST_URL).permitAll()
+				.requestMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
 				.requestMatchers("/v3/api-docs*", "/configuration/**", "/swagger-ui/**", "/webjars/**").permitAll()
 				.anyRequest().authenticated())
 				.csrf(csrf -> csrf.disable())
@@ -79,7 +78,7 @@ public class WebSecurity {
 		authenticationFilter.setUsernameParameter("email");
 		authenticationFilter.setPasswordParameter("password");
 
-		AuthorizationFilter authorizationFilter = new AuthorizationFilter(getAuthenticationManager(http));
+		AuthorizationFilter authorizationFilter = new AuthorizationFilter(getAuthenticationManager(http), userRepository);
 
 		http.addFilter(authenticationFilter);
 		http.addFilter(authorizationFilter);

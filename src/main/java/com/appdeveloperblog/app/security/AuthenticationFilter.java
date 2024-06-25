@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.appdeveloperblog.app.SpringApplicationContext;
 import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.service.UserService;
-import com.appdeveloperblog.app.shared.dto.UserDto;
 import com.appdeveloperblog.app.ui.model.request.UserLoginRequestModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -65,7 +62,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		SecretKey secretKey = new SecretKeySpec(secretKeyBytes, SignatureAlgorithm.HS512.getJcaName());
 		Instant now = Instant.now();
 
-		String username = ((User) authResult.getPrincipal()).getUsername();
+		String username = ((UserPrincipal) authResult.getPrincipal()).getUsername();
 		String token = Jwts.builder().setSubject(username)
 				.setExpiration(Date.from(now.plusMillis(SecurityConstants.EXPIRATION_TIME))).setIssuedAt(Date.from(now))
 				.signWith(secretKey, SignatureAlgorithm.HS512).compact();
