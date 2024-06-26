@@ -20,7 +20,7 @@ import com.appdeveloperblog.app.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled=true)
 public class WebSecurity {
 
 	@Autowired
