@@ -66,6 +66,4 @@ public class UserEntity implements Serializable {
 				+ emailVerificationToken + ", emailVerificationStatus=" + emailVerificationStatus + ", addresses="
 				+ addresses + "]";
 	}
-	
-	
 }

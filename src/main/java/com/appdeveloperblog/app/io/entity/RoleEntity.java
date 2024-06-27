@@ -61,4 +61,9 @@ public class RoleEntity implements Serializable {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	@Override
+	public String toString() {
+		return "RoleEntity [id=" + id + ", name=" + name + "]";
+	}
 }

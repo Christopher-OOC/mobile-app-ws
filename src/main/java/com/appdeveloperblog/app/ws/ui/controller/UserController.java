@@ -2,6 +2,8 @@ package com.appdeveloperblog.app.ws.ui.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.appdeveloperblog.app.service.AddressService;
 import com.appdeveloperblog.app.service.UserService;
+import com.appdeveloperblog.app.shared.Roles;
 import com.appdeveloperblog.app.shared.dto.AddressDto;
 import com.appdeveloperblog.app.shared.dto.UserDto;
 import com.appdeveloperblog.app.ui.model.request.PasswordResetRequestModel;
@@ -67,6 +70,7 @@ public class UserController {
 		ModelMapper modelMapper = new ModelMapper();
 
 		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+		userDto.setRoles(new HashSet<>(Arrays.asList(Roles.ROLE_USER.name())));
 
 		UserDto createUser = userService.createUser(userDto);
 		

@@ -1,7 +1,8 @@
 package com.appdeveloperblog.app.service.impl;
 
 import java.util.ArrayList;
-
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -15,8 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.appdeveloperblog.app.repository.PasswordResetTokenRepository;
+import com.appdeveloperblog.app.repository.RoleRepository;
 import com.appdeveloperblog.app.repository.UserRepository;
 import com.appdeveloperblog.app.io.entity.PasswordResetTokenEntity;
+import com.appdeveloperblog.app.io.entity.RoleEntity;
 import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.service.UserService;
 import com.appdeveloperblog.app.shared.AmazonSES;
@@ -33,7 +36,12 @@ public class UserServiceImpl  implements UserService {
 	private UserRepository userRepository;
 	
 	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
 	PasswordResetTokenRepository passwordResetTokenRepository;
+	
+	
 
 	@Autowired
 	private Utils utils;
@@ -68,6 +76,18 @@ public class UserServiceImpl  implements UserService {
 		userEntity.setUserId(publicUserId);
 		userEntity.setEmailVerificationToken(Utils.generateEmailVerificationToken(publicUserId));
 		userEntity.setEmailVerificationStatus(false);
+		
+		Collection<RoleEntity> roleEntities = new HashSet<>();
+		
+		for (String role : user.getRoles()) {
+			RoleEntity roleEntity = roleRepository.findByName(role);
+			
+			if (roleEntity != null) {
+				roleEntities.add(roleEntity);
+			}
+		}
+		
+		userEntity.setRoles(roleEntities);
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 

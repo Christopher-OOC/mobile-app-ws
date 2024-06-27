@@ -16,6 +16,7 @@ import com.appdeveloperblog.app.io.entity.RoleEntity;
 import com.appdeveloperblog.app.io.entity.UserEntity;
 import com.appdeveloperblog.app.repository.RoleRepository;
 import com.appdeveloperblog.app.repository.UserRepository;
+import com.appdeveloperblog.app.shared.Roles;
 import com.appdeveloperblog.app.shared.Utils;
 
 @Component
@@ -47,8 +48,8 @@ public class InitialUsersSetup {
 		 AuthorityEntity writeAuthority = createAuthority("WRITE_AUTHORITY");
 		 AuthorityEntity deleteAuthority = createAuthority("DELETE_AUTHORITY");	 
 		 
-		 RoleEntity roleUser = createRole("ROLE_USER", Arrays.asList(readAuthority, writeAuthority));
-		 RoleEntity roleAdmin = createRole("ROLE_ADMIN", Arrays.asList(readAuthority, writeAuthority, deleteAuthority));
+		 createRole(Roles.ROLE_USER.name(), Arrays.asList(readAuthority, writeAuthority));
+		 RoleEntity roleAdmin = createRole(Roles.ROLE_ADMIN.name(), Arrays.asList(readAuthority, writeAuthority, deleteAuthority));
 		 
 		 UserEntity admin = userRepository.findByEmail(INITIAL_ADMIN_EMAIL);
 		 
