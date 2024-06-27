@@ -11,6 +11,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +48,7 @@ public class UserController {
 	@Autowired
 	private AddressService addressService;
 
+	@PostAuthorize("hasRole('ADMIN') or returnObject.userId == principal.userId")
 	@GetMapping("/{id}")
 	public UserRest getUser(@PathVariable("id") String id) {
 		UserRest returnValue = new UserRest();
@@ -84,6 +88,9 @@ public class UserController {
 		return returnValue;
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or #id == principal.userId")
+	//@PreAuthorize("hasRole('DELETE_AUTHORITY')")
+	//@Secured("ROLE_ADMIN")
 	@DeleteMapping("/{id}")
 	public OperationStatusModel deleteUser(@PathVariable("id") String id) {
 		OperationStatusModel returnValue = new OperationStatusModel();

@@ -75,9 +75,14 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 		if (email != null) {
 			
 			UserEntity userEntity = userRepository.findByEmail(email);
+			
+			if (userEntity == null) {
+				return null;
+			}
+			
 			UserPrincipal userPrincipal = new UserPrincipal(userEntity);
 			
-			return new UsernamePasswordAuthenticationToken(email, null, userPrincipal.getAuthorities());
+			return new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
 		}
 		
 		

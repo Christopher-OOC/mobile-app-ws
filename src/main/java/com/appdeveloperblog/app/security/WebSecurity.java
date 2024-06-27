@@ -20,7 +20,7 @@ import com.appdeveloperblog.app.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled=true)
+@EnableMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class WebSecurity {
 
 	@Autowired
@@ -67,7 +67,7 @@ public class WebSecurity {
 		http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
 				.permitAll().requestMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
 				.requestMatchers(HttpMethod.GET, SecurityConstants.PASSWORD_RESET_REQUEST_URL).permitAll()
-				.requestMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
+				//.requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
 				.requestMatchers("/v3/api-docs*", "/configuration/**", "/swagger-ui/**", "/webjars/**").permitAll()
 				.anyRequest().authenticated())
 				.csrf(csrf -> csrf.disable())
